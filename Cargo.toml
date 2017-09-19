@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["coco <coco@hexgolems.com>"]
 description = "A simple sampler for loaded dices, implementing the alias method"
 repository = "https://github.com/eqv/loaded_dice"
-keywords = ["random", "rng", "alias","loaded_dice", "probability_distribution"]
+keywords = ["random", "rng", "alias","loaded_dice", "probability"]
 
 license-file = "LICENSE"
 
