@@ -44,7 +44,10 @@ impl<R: Rng> LoadedDiceSampler<R> {
         let mut tmp = {probs.clone().into_iter().enumerate().collect::<Vec<_>>()};
 
         while tmp.len() > 1{
-            tmp.sort_by(|&(_,p1), &(_,p2)| p2.partial_cmp(&p1).unwrap()); // [biggest-prob, ...,  smallest-prob]
+            //rust sort ist optimized for nearly sorted cases, so I assume that a
+            //better implementation with priority queues might actually be slower, however if you
+            //run into performance troubles, replace tmp with a min/max heap
+            tmp.sort_by(|&(_,p1), &(_,p2)| p2.partial_cmp(&p1).unwrap()); // [biggest-prob, ..., smallest-prob]
             let (min_i, min_p) = tmp.pop().unwrap();
             let &mut (ref max_i, ref mut max_p) = tmp.get_mut(0).unwrap();
             res.push(AliasEntry::new(min_i, *max_i, min_p*n));
@@ -57,19 +60,20 @@ impl<R: Rng> LoadedDiceSampler<R> {
 
         return res;
     }
-
-
 }
 
 #[cfg(test)]
 mod tests {
     use ::LoadedDiceSampler;
-    use rand::thread_rng;
+    use rand::{thread_rng, Rng};
     #[test]
     fn it_works() {
-        let base = vec!(0.5,0.3,0.1,0.1);
+        let len = thread_rng().gen_range(3,10);
+        let base = (0..len).map(|_| thread_rng().next_f64()).collect::<Vec<_>>();
+        let sum : f64 = base.iter().sum();
+        let base = base.iter().map(|v| v / sum).collect::<Vec<_>>();
         let mut s = LoadedDiceSampler::new(base.clone(), thread_rng());
-        let mut res: Vec<usize> = vec!(0; 4);
+        let mut res: Vec<usize> = vec!(0; len);
         let iter: usize = 1000000;
         for i in (0..iter) {
             let i = s.sample();

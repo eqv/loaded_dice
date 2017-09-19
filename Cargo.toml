@@ -1,0 +1,16 @@
+[package]
+name = "loaded_dice"
+version = "0.1.0"
+authors = ["coco <coco@hexgolems.com>"]
+description = "A simple sampler for loaded dices, implementing the alias method"
+repository = "https://github.com/eqv/loaded_dice"
+keywords = ["sample","random", "rng", "alias","loaded", "dice", "discrete", "distribution","probability"]
+
+license-file = "LICENSE"
+
+[dependencies]
+rand = "0.3.*"
+
+[[bin]]
+name = "example"
+path = "src/example.rs"
