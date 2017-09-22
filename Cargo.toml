@@ -1,6 +1,6 @@
 [package]
 name = "loaded_dice"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["coco <coco@hexgolems.com>"]
 description = "A simple sampler for loaded dices, implementing the alias method"
 repository = "https://github.com/eqv/loaded_dice"

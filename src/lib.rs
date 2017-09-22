@@ -1,7 +1,7 @@
 extern crate rand;
 use rand::Rng;
 
-#[derive(Debug)]
+#[derive(Clone, Debug, PartialEq)]
 struct AliasEntry{
     val: usize,
     alias: usize,
@@ -14,7 +14,7 @@ impl AliasEntry{
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct LoadedDiceSampler<R: Rng> {
     entries: Vec<AliasEntry>,
     rng: R,
