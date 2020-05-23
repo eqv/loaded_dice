@@ -28,7 +28,7 @@ impl<R: Rng> LoadedDiceSampler<R> {
 
     pub fn sample(&mut self) -> usize{
         let index = self.rng.gen_range(0,self.entries.len());
-        let coin = self.rng.next_f64();
+        let coin = self.rng.gen::<f64>();
         let entry = &self.entries[index];
         if coin > entry.prob_of_val  {
             return entry.alias;
@@ -69,7 +69,7 @@ mod tests {
     #[test]
     fn it_works() {
         let len = thread_rng().gen_range(3,10);
-        let base = (0..len).map(|_| thread_rng().next_f64()).collect::<Vec<_>>();
+        let base = (0..len).map(|_| thread_rng().gen::<f64>()).collect::<Vec<_>>();
         let sum : f64 = base.iter().sum();
         let base = base.iter().map(|v| v / sum).collect::<Vec<_>>();
         let mut s = LoadedDiceSampler::new(base.clone(), thread_rng());
