@@ -1,4 +1,8 @@
-extern crate rand;
+#![no_std]
+
+#[macro_use]
+extern crate alloc;
+use alloc::vec::Vec;
 use rand::Rng;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -61,36 +65,37 @@ impl<R: Rng> LoadedDiceSampler<R> {
         }
         let (last_i, last_p) = tmp.pop().unwrap();
         assert!(0.999 < last_p * n && last_p * n < 1.001); // last value should always be exactly 1 but floats...
-        res.push(AliasEntry::new(last_i, std::usize::MAX, 1.0));
+        res.push(AliasEntry::new(last_i, core::usize::MAX, 1.0));
 
         res
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "std"))]
 mod tests {
+    use crate::LoadedDiceSampler;
+    use alloc::vec::Vec;
     use rand::{thread_rng, Rng};
-    use LoadedDiceSampler;
+
     #[test]
     fn it_works() {
-        let len = thread_rng().gen_range(3..10);
-        let base = (0..len)
-            .map(|_| thread_rng().gen::<f64>())
-            .collect::<Vec<_>>();
+        let mut rng = thread_rng();
+        let len = rng.gen_range(3..10);
+        let base = (0..len).map(|_| rng.gen::<f64>()).collect::<Vec<_>>();
         let sum: f64 = base.iter().sum();
         let base = base.iter().map(|v| v / sum).collect::<Vec<_>>();
-        let mut s = LoadedDiceSampler::new(base.clone(), thread_rng());
+        let mut s = LoadedDiceSampler::new(base.clone(), rng);
         let mut res: Vec<usize> = vec![0; len];
         let iter: usize = 1000000;
         for _ in 0..iter {
             let i = s.sample();
             res[i] += 1;
         }
-        let res_p = res
+        let _res_p = res
             .iter()
             .map(|&f| f as f64 / iter as f64)
             .collect::<Vec<_>>();
-        println!("{:?}", res_p);
+        //println!("{:?}", res_p);
         for (i, c) in res.iter().enumerate() {
             let p_i = *c as f64 / iter as f64;
             assert!(base[i] * 0.99 < p_i && base[i] * 1.01 > p_i);
