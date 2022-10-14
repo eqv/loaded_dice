@@ -9,7 +9,7 @@ keywords = ["random", "rng", "alias","loaded_dice", "probability"]
 license-file = "LICENSE"
 
 [dependencies]
-rand = "0.7.*"
+rand = "0.8"
 
 [[bin]]
 name = "example"
