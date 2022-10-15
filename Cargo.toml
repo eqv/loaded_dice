@@ -4,13 +4,17 @@ version = "0.2.1"
 authors = ["coco <coco@hexgolems.com>"]
 description = "A simple sampler for loaded dices, implementing the alias method"
 repository = "https://github.com/eqv/loaded_dice"
-keywords = ["random", "rng", "alias","loaded_dice", "probability"]
+keywords = ["random", "rng", "alias", "loaded_dice", "probability"]
+edition = "2021"
 
 license-file = "LICENSE"
 
-[dependencies]
-rand = "0.7.*"
+[features]
+std = ["rand/std", "rand/std_rng"]
 
-[[bin]]
+[dependencies]
+rand = { version = "0.8", default-features = false }
+
+[[example]]
 name = "example"
 path = "src/example.rs"
